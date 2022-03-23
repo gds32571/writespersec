@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# gswann 16 Feb 2021
+
+echo "System is $HOSTNAME"
+
+echo 'System disk'
+mydisk=$(mount | grep '/ ' | awk '{print $1}' | cut -c6-14 | awk '{printf $0}') 
+echo $mydisk
+
+echo 'Seconds uptime:'
+secsup=$(awk '{print $1}' /proc/uptime)
+echo $secsup
+
+echo "Number of writes since boot"
+numwrites=$(cat /proc/diskstats | grep "$mydisk" | head -n1 | awk '{printf $8}')
+echo $numwrites
+
+echo "Writes per second to $mydisk"
+wps=$(echo - | awk "{print $numwrites / $secsup}")
+echo $wps
